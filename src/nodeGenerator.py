@@ -56,7 +56,7 @@ class Node():
 		self.model = None
 		self.collisionShape = None
 
-		self.model = loader.loadModel("ball")
+		self.model = loader.loadModel(self.type+"-node")
 		self.model.reparentTo(render)
 		self.model.setPos(self.position)
 		self.model.setScale(0.5)
