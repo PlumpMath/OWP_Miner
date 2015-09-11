@@ -22,9 +22,9 @@ class Main(ShowBase):
         # Need Basic gui drag and drop
         # Need mining nodes
         self.t = Terrain("map.png")
-        self.nodeGen = NodeGenerator(self, 50)
+        self.nodeGen = NodeGenerator(self, 100)
 
-        print render.ls()
+        #print render.ls()
         
 
 

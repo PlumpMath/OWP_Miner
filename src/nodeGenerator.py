@@ -24,13 +24,10 @@ class NodeGenerator():
     	self.numOfNodes = _numOfNodes
     	self.currentNodes = {}
 
-    	self.generateNodes()
     	self.placeNodes()
 
-    def generateNodes(self):
-    	# Generate number of nodes
-    	for x in range(self.numOfNodes):
-    		self.currentNodes[x] = Node()
+    def generateNode(self, _id):
+    	self.currentNodes[_id] = Node()
 
     def placeNodes(self):
     	for i in xrange(self.numOfNodes):
@@ -39,8 +36,8 @@ class NodeGenerator():
 
     		if random.random() < self.main.t.terrain.getElevation(x, y):
     			elevation = self.main.t.terrain.getElevation(x, y)
-    			node = random.choice(self.currentNodes)
-    			node.model.setPos(x, y, elevation*25)
+    			self.generateNode(i)
+    			self.currentNodes[i].model.setPos(x, y, elevation*25)
 
     def respawnQueue(self):
     	pass
@@ -63,6 +60,8 @@ class Node():
 		self.model.reparentTo(render)
 		self.model.setPos(self.position)
 		self.model.setScale(0.5)
+
+		print "Created:", self.type, "Node, Value:", self.lootAmount, "RespawnTime:", self.respawnTime
 
 	def setCollisionShape(self):
 		pass
