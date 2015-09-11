@@ -7,6 +7,7 @@ import sys
 ### PANDA Imports ###
 from direct.showbase.ShowBase import ShowBase
 from terrain import Terrain
+from nodeGenerator import NodeGenerator
 
 
 ########################################################################
@@ -20,7 +21,10 @@ class Main(ShowBase):
         # - Basic pickaxe animation
         # Need Basic gui drag and drop
         # Need mining nodes
-        t = Terrain("map.png")
+        self.t = Terrain("map.png")
+        self.nodeGen = NodeGenerator(self, 50)
+
+        print render.ls()
         
 
 

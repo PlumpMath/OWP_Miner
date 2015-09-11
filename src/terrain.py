@@ -23,6 +23,9 @@ class Terrain():
         self.terrain.getRoot().reparentTo(render)
         self.terrain.generate()
 
+        self.terrainSize = (self.terrain.heightfield().getReadXSize(), self.terrain.heightfield().getReadYSize())
+        print "Terrain Size:", self.terrainSize
+
         # Some Test light
         dlight = DirectionalLight("dlight")
         dlight.setColor(VBase4(0.8, 0.8, 0.5, 1))
