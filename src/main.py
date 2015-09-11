@@ -8,6 +8,7 @@ import sys
 from direct.showbase.ShowBase import ShowBase
 from terrain import Terrain
 from player import Player
+from nodeGenerator import NodeGenerator
 
 ########################################################################
 
@@ -26,7 +27,10 @@ class Main(ShowBase):
         # - Basic pickaxe animation
         # Need Basic gui drag and drop
         # Need mining nodes
-        t = Terrain("map.png")
+        self.t = Terrain("map.png")
+        self.nodeGen = NodeGenerator(self, 100)
+
+        #print render.ls()
 
         p = Player()
         p.run()
