@@ -37,7 +37,7 @@ class NodeGenerator():
     		if random.random() < self.main.t.terrain.getElevation(x, y):
     			elevation = self.main.t.terrain.getElevation(x, y)
     			self.generateNode(i)
-    			self.currentNodes[i].model.setPos(x, y, elevation*25)
+    			self.currentNodes[i].model.setPos(x, y, elevation*self.main.t.zScale)
 
     def respawnQueue(self):
     	pass

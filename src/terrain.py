@@ -14,11 +14,12 @@ class Terrain():
 
     def __init__(self, _heightField):
 
-    	texture = loader.loadTexture("ground.png")
+    	texture = loader.loadTexture("ground_tex.png")
+        self.zScale = 45
         
         self.terrain = GeoMipTerrain("BasicTerrain")
         self.terrain.setHeightfield(_heightField)
-        self.terrain.getRoot().setSz(25)
+        self.terrain.getRoot().setSz(self.zScale)
         self.terrain.getRoot().setTexture(texture)
         self.terrain.getRoot().reparentTo(render)
         self.terrain.generate()

@@ -8,10 +8,14 @@ from direct.showbase.DirectObject import DirectObject
 class Player(DirectObject):
     def __init__(self, _main):
         self.main = _main
+
+        # Stats
+        self.moveSpeed = 8
+
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
         self.player = NodePath("Player")#loader.loadModel("smiley")
-        self.player.setPos(0, 0, 5)
+        self.player.setPos(0, 0, 1)
         self.player.setH(180)
         self.player.reparentTo(render)
 
@@ -71,17 +75,17 @@ class Player(DirectObject):
 
         # basic movement of the player
         if self.keyMap["left"] != 0:
-            self.player.setX(self.player, 25 * globalClock.getDt())
+            self.player.setX(self.player, self.moveSpeed * globalClock.getDt())
         if self.keyMap["right"] != 0:
-            self.player.setX(self.player, -25 * globalClock.getDt())
+            self.player.setX(self.player, -self.moveSpeed * globalClock.getDt())
         if self.keyMap["forward"] != 0:
-            self.player.setY(self.player, -25 * globalClock.getDt())
+            self.player.setY(self.player, -self.moveSpeed * globalClock.getDt())
         if self.keyMap["backward"] != 0:
-            self.player.setY(self.player, 25 * globalClock.getDt())
+            self.player.setY(self.player, self.moveSpeed * globalClock.getDt())
 
 
         # keep the player on the ground
         elevation = self.main.t.terrain.getElevation(self.player.getX(), self.player.getY())
-        self.player.setZ(elevation*25)
+        self.player.setZ(elevation*self.main.t.zScale)
 
         return task.cont
