@@ -32,8 +32,8 @@ class Main(ShowBase):
 
         #print render.ls()
 
-        p = Player()
-        p.run()
+        self.p = Player(self)
+        self.p.run()
 
 
 game = Main()

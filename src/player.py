@@ -2,17 +2,19 @@ import sys
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3
-from panda3d.core import NodePath, PandaNode
+from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerFloor
 from direct.showbase.DirectObject import DirectObject
 
 class Player(DirectObject):
-    def __init__(self):
+    def __init__(self, _main):
+        self.main = _main
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
-        self.player = loader.loadModel("smiley")
-        self.player.setPos(0, 0, 25)
+        self.player = NodePath("Player")#loader.loadModel("smiley")
+        self.player.setPos(0, 0, 5)
         self.player.setH(180)
         self.player.reparentTo(render)
+
         self.accept("w", self.setKey, ["forward",1])
         self.accept("w-up", self.setKey, ["forward",0])
         self.accept("a", self.setKey, ["left",1])
@@ -76,5 +78,10 @@ class Player(DirectObject):
             self.player.setY(self.player, -25 * globalClock.getDt())
         if self.keyMap["backward"] != 0:
             self.player.setY(self.player, 25 * globalClock.getDt())
+
+
+        # keep the player on the ground
+        elevation = self.main.t.terrain.getElevation(self.player.getX(), self.player.getY())
+        self.player.setZ(elevation*25)
 
         return task.cont
