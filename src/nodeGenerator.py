@@ -62,6 +62,9 @@ class Node():
 
 		print "Created:", self.type, "Node, Value:", self.lootAmount, "RespawnTime:", self.respawnTime
 
+	def removeModel(self):
+		self.model.remove()
+
 	def setCollisionShape(self):
 		pass
 

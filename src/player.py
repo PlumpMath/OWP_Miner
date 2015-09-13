@@ -11,6 +11,8 @@ class Player(DirectObject):
 
         # Stats
         self.moveSpeed = 8
+        self.inventory = []
+        self.maxCarryWeight = 20.0 #kg ?
 
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
@@ -130,6 +132,12 @@ class Player(DirectObject):
         for node in self.main.nodeGen.currentNodes:
             if self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
                 print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
+                self.main.nodeGen.currentNodes[node].removeModel()
+                self.inventory.append(self.main.nodeGen.currentNodes[node])
+                print "Inventory:", self.inventory
+                
+                break
+
 
                 
                 
