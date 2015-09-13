@@ -4,6 +4,7 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3, GeomNode, CollisionTraverser
 from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerQueue
 from direct.showbase.DirectObject import DirectObject
+from inventoryGui import Inventory
 
 class Player(DirectObject):
     def __init__(self, _main):
@@ -13,6 +14,11 @@ class Player(DirectObject):
         self.moveSpeed = 8
         self.inventory = []
         self.maxCarryWeight = 20.0 #kg ?
+
+        # Inventory GUI
+        self.inventoryGui = Inventory()
+        self.inventoryGui.hide()
+        self.inventoryActive = False
 
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
@@ -30,6 +36,7 @@ class Player(DirectObject):
         self.accept("d", self.setKey, ["right",1])
         self.accept("d-up", self.setKey, ["right",0])
         self.accept("mouse1", self.handleLeftMouse)
+        self.accept("i", self.toggleInventory)
 
 
         # screen sizes
@@ -110,6 +117,14 @@ class Player(DirectObject):
 
         return task.cont
 
+    def toggleInventory(self):
+        if self.inventoryActive:
+            self.inventoryGui.hide()
+            self.inventoryActive = False
+        else:
+            self.inventoryGui.show()
+            self.inventoryActive = True
+
     def handleLeftMouse(self):
         # Do the mining
         if base.mouseWatcherNode.hasMouse():
@@ -123,21 +138,19 @@ class Player(DirectObject):
                 self.mouseRayHandler.sortEntries()
                 pickedObj = self.mouseRayHandler.getEntry(0).getIntoNodePath()
                 self.mine(pickedObj)
-                
+
 
     def mine(self, _nodeNP):
         self.nodeNP = _nodeNP
 
         # get the object class
         for node in self.main.nodeGen.currentNodes:
+            if self.main.nodeGen.currentNodes[node].model.isEmpty(): continue
             if self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
                 print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
                 self.main.nodeGen.currentNodes[node].removeModel()
                 self.inventory.append(self.main.nodeGen.currentNodes[node])
+                self.inventoryGui.updateList(self.inventory)
                 print "Inventory:", self.inventory
-                
+
                 break
-
-
-                
-                

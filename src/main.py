@@ -11,7 +11,7 @@ from terrain import Terrain
 from player import Player
 from nodeGenerator import NodeGenerator
 
-loadPrcFileData('', 'win-size 1200 760')
+loadPrcFileData('', 'win-size 1024 600')
 
 ########################################################################
 
