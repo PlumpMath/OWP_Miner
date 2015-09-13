@@ -1,8 +1,8 @@
 import sys
 
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import Vec3
-from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerFloor
+from panda3d.core import Vec3, GeomNode
+from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerQueue
 from direct.showbase.DirectObject import DirectObject
 
 class Player(DirectObject):
@@ -27,6 +27,8 @@ class Player(DirectObject):
         self.accept("s-up", self.setKey, ["backward",0])
         self.accept("d", self.setKey, ["right",1])
         self.accept("d-up", self.setKey, ["right",0])
+        self.accept("mouse1", self.mine)
+
 
         # screen sizes
         self.winXhalf = base.win.getXSize() / 2
@@ -40,6 +42,15 @@ class Player(DirectObject):
         camera.setZ(self.player, 2)
         base.camLens.setFov(75)
         base.camLens.setNear(0.8)
+
+        # Mouse controls
+        self.mouseNode = CollisionNode('mouseRay')
+        self.mouseNodeNP = camera.attachNewNode(self.mouseNode)
+        self.mouseNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
+        self.mouseRay = CollisionRay()
+        self.mouseNode.addSolid(self.mouseRay)
+        self.mouseRayHandler = CollisionHandlerQueue()
+        #base.cTrav.addCollider(self.mouseRa, self.mouseRayHandler)
 
     def run(self):
         taskMgr.add(self.move, "moveTask", priority=-4)
@@ -86,6 +97,27 @@ class Player(DirectObject):
 
         # keep the player on the ground
         elevation = self.main.t.terrain.getElevation(self.player.getX(), self.player.getY())
-        self.player.setZ(elevation*self.main.t.zScale)
+        self.player.setZ(elevation*self.main.t.zScale
+
+
+            )
 
         return task.cont
+
+    def mine(self):
+        # Do the mining
+        if base.mouseWatcherNode.hasMouse():
+            mpos = base.mouseWatcherNode.getMouse()
+            self.mouseRay.setFromLens(base.camNode, mpos.getX(), mpos.getY())
+
+            #base.cTrav.traverse(render)
+            # Assume for simplicity's sake that myHandler is a CollisionHandlerQueue.
+            if self.mouseRayHandler.getNumEntries() > 0:
+            # This is so we get the closest object.
+                self.mouseRayHandler.myHandler.sortEntries()
+                pickedObj = self.mouseRayHandler.getEntry(0).getIntoNodePath()
+                pickedObj = pickedObj.findNetTag('myObjectTag')
+                print pickedObj
+                
+                if not pickedObj.isEmpty():
+                    handlePickedObject(pickedObj)
