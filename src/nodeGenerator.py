@@ -26,8 +26,8 @@ class NodeGenerator():
 
     	self.placeNodes()
 
-    def generateNode(self, _id):
-    	self.currentNodes[_id] = Node()
+    def generateNode(self, _id, _pos):
+    	self.currentNodes[_id] = Node(_pos)
 
     def placeNodes(self):
     	for i in xrange(self.numOfNodes):
@@ -36,8 +36,7 @@ class NodeGenerator():
 
     		if random.random() < self.main.t.terrain.getElevation(x, y):
     			elevation = self.main.t.terrain.getElevation(x, y)
-    			self.generateNode(i)
-    			self.currentNodes[i].model.setPos(x, y, elevation*self.main.t.zScale)
+    			self.generateNode(i, (x, y, elevation*self.main.t.zScale))
 
     def respawnQueue(self):
     	pass
@@ -46,13 +45,13 @@ class NodeGenerator():
 
 class Node():
 
-	def __init__(self):
+	def __init__(self, _pos):
 		types = ['copper', 'iron', 'silver', 'gold']
 
 		self.type = random.choice(types)
 		self.lootAmount = random.randint(1, 8)
 		self.respawnTime = random.randint(300, 3600) # 5mins - 60mins, Maybe a bit heavy but whatever
-		self.position = (0, 0, 0)
+		self.position = _pos
 		self.model = None
 		self.collisionShape = None
 
@@ -71,3 +70,9 @@ class Node():
 
 	def setPosition(self):
 		pass
+
+	def giveLoot(self):
+		return self.lootAmount
+
+	def giveType(self):
+		return self.type
