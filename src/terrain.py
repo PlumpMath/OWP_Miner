@@ -33,3 +33,9 @@ class Terrain():
         dlnp = render.attachNewNode(dlight)
         dlnp.setHpr(0, -60, 0)
         render.setLight(dlnp)
+
+
+        # Add basic blacksmith hut
+        tmp = loader.loadModel("blacksmith_hut")
+        tmp.reparentTo(render)
+        tmp.setPos(164.054, 340.92, 11.3384)

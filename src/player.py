@@ -24,7 +24,7 @@ class Player(DirectObject):
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
         self.player = NodePath("Player")#loader.loadModel("smiley")
-        self.player.setPos(0, 0, 1)
+        self.player.setPos(149.032, 329.324, 11.3384)
         self.player.setH(180)
         self.player.reparentTo(render)
 
@@ -143,12 +143,16 @@ class Player(DirectObject):
 
         # get the object class
         for node in self.main.nodeGen.currentNodes:
+            # if mining node
             if self.main.nodeGen.currentNodes[node].model and self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
-                print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
                 self.main.nodeGen.currentNodes[node].removeModel()
                 self.inventory.append(self.main.nodeGen.currentNodes[node])
                 self.currentInventoryWeight += self.main.nodeGen.currentNodes[node].weight
+                self.inventoryGui.updateList(self.inventory)
+                print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
                 print "Inventory:", self.inventory
                 print "Current Weight:", self.currentInventoryWeight
                 break
+
+        print self.player.getPos()
 
