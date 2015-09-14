@@ -4,6 +4,7 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3, GeomNode, CollisionTraverser
 from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerQueue
 from direct.showbase.DirectObject import DirectObject
+from inventoryGui import Inventory
 
 class Player(DirectObject):
     def __init__(self, _main):
@@ -14,6 +15,11 @@ class Player(DirectObject):
         self.inventory = []
         self.maxCarryWeight = 20.0 #kg ?
         self.currentInventoryWeight = 0.0
+
+        # Inventory GUI
+        self.inventoryGui = Inventory()
+        self.inventoryGui.hide()
+        self.inventoryActive = False
 
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
@@ -31,6 +37,7 @@ class Player(DirectObject):
         self.accept("d", self.setKey, ["right",1])
         self.accept("d-up", self.setKey, ["right",0])
         self.accept("mouse1", self.handleLeftMouse)
+        self.accept("i", self.toggleInventory)
 
 
         # screen sizes
@@ -108,6 +115,14 @@ class Player(DirectObject):
 
         return task.cont
 
+    def toggleInventory(self):
+        if self.inventoryActive:
+            self.inventoryGui.hide()
+            self.inventoryActive = False
+        else:
+            self.inventoryGui.show()
+            self.inventoryActive = True
+
     def handleLeftMouse(self):
         # Do the mining
         if base.mouseWatcherNode.hasMouse():
@@ -121,7 +136,7 @@ class Player(DirectObject):
                 self.mouseRayHandler.sortEntries()
                 pickedObj = self.mouseRayHandler.getEntry(0).getIntoNodePath()
                 self.mine(pickedObj)
-                
+
 
     def mine(self, _nodeNP):
         self.nodeNP = _nodeNP
@@ -135,5 +150,5 @@ class Player(DirectObject):
                 self.currentInventoryWeight += self.main.nodeGen.currentNodes[node].weight
                 print "Inventory:", self.inventory
                 print "Current Weight:", self.currentInventoryWeight
-                           
-                
+                break
+
