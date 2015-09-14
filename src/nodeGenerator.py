@@ -47,6 +47,8 @@ class Node():
 
 	def __init__(self, _pos):
 		types = ['copper', 'iron', 'silver', 'gold']
+		# Stats
+		self.weight = 1.0# kg
 
 		self.type = random.choice(types)
 		self.lootAmount = random.randint(1, 8)
@@ -63,7 +65,7 @@ class Node():
 		print "Created:", self.type, "Node, Value:", self.lootAmount, "RespawnTime:", self.respawnTime
 
 	def removeModel(self):
-		self.model.remove()
+		self.model.remove_node()
 
 	def setCollisionShape(self):
 		pass

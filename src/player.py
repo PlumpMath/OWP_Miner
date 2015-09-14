@@ -13,6 +13,7 @@ class Player(DirectObject):
         self.moveSpeed = 8
         self.inventory = []
         self.maxCarryWeight = 20.0 #kg ?
+        self.currentInventoryWeight = 0.0
 
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
@@ -103,10 +104,7 @@ class Player(DirectObject):
 
         # keep the player on the ground
         elevation = self.main.t.terrain.getElevation(self.player.getX(), self.player.getY())
-        self.player.setZ(elevation*self.main.t.zScale
-
-
-            )
+        self.player.setZ(elevation*self.main.t.zScale)
 
         return task.cont
 
@@ -130,14 +128,12 @@ class Player(DirectObject):
 
         # get the object class
         for node in self.main.nodeGen.currentNodes:
-            if self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
+            if self.main.nodeGen.currentNodes[node].model and self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
                 print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
                 self.main.nodeGen.currentNodes[node].removeModel()
                 self.inventory.append(self.main.nodeGen.currentNodes[node])
+                self.currentInventoryWeight += self.main.nodeGen.currentNodes[node].weight
                 print "Inventory:", self.inventory
-                
-                break
-
-
-                
+                print "Current Weight:", self.currentInventoryWeight
+                           
                 
