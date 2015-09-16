@@ -69,6 +69,9 @@ class Player(DirectObject):
     def run(self):
         taskMgr.add(self.move, "moveTask", priority=-4)
 
+    def pause(self):
+        taskMgr.remove("moveTask")
+
     def setKey(self, key, value):
         self.keyMap[key] = value
 
@@ -119,9 +122,11 @@ class Player(DirectObject):
         if self.inventoryActive:
             self.inventoryGui.hide()
             self.inventoryActive = False
+            self.run()
         else:
             self.inventoryGui.show()
             self.inventoryActive = True
+            self.pause()
 
     def handleLeftMouse(self):
         # Do the mining
@@ -155,4 +160,3 @@ class Player(DirectObject):
                 break
 
         print self.player.getPos()
-
