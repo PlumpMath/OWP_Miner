@@ -69,7 +69,6 @@ class Inventory(DirectObject):
             i += 1
         if i == 1: j-=1
         height = ((j) * -yStep) - 0.16
-        print "HEIGT:", height
         # resize the canvas. This will make the scrollbars dis-/appear,
         # dependent on if the canvas is bigger than the frame size.
         self.itemFrame["canvasSize"] = (
@@ -77,8 +76,6 @@ class Inventory(DirectObject):
             0.8,
             -height,
             0.8)
-        print self.itemFrame["canvasSize"]
-        print self.itemFrame["frameSize"]
 
     def inObject(self, element, event):
         # Can be used to highlight objects
