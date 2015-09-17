@@ -153,15 +153,26 @@ class Player(DirectObject):
 
         # get the object class
         for node in self.main.nodeGen.currentNodes:
-            # if mining node
-            if self.main.nodeGen.currentNodes[node].model and self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
-                self.main.nodeGen.currentNodes[node].removeModel()
+            if self.main.nodeGen.currentNodes[node] in self.inventory:
+                print "new Loot:", self.main.nodeGen.currentNodes[node].giveLoot()
                 self.inventory.append(self.main.nodeGen.currentNodes[node])
-                self.currentInventoryWeight += self.main.nodeGen.currentNodes[node].weight
-                self.inventoryGui.updateList(self.inventory)
-                print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
-                print "Inventory:", self.inventory
-                print "Current Weight:", self.currentInventoryWeight
+                if self.main.nodeGen.currentNodes[node].lootLeft == 0:
+                    self.main.nodeGen.currentNodes[node].removeModel()
+                    break
                 break
+
+
+            # if mining node
+            else: 
+
+                if self.main.nodeGen.currentNodes[node].model and self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
+                    #self.main.nodeGen.currentNodes[node].removeModel()
+                    self.inventory.append(self.main.nodeGen.currentNodes[node])
+                    self.currentInventoryWeight += self.main.nodeGen.currentNodes[node].weight
+                    self.inventoryGui.updateList(self.inventory)
+                    print "You received:", self.main.nodeGen.currentNodes[node].giveLoot(), self.main.nodeGen.currentNodes[node].giveType(), "Ores"
+                    print "Inventory:", self.inventory
+                    print "Current Weight:", self.currentInventoryWeight
+                    break
 
         print self.player.getPos()

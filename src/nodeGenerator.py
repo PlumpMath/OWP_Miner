@@ -51,7 +51,8 @@ class Node():
 		self.weight = 1.0# kg
 
 		self.type = random.choice(types)
-		self.lootAmount = random.randint(1, 8)
+		self.lootAmount = random.randint(2, 8)
+		self.lootLeft = self.lootAmount
 		self.respawnTime = random.randint(300, 3600) # 5mins - 60mins, Maybe a bit heavy but whatever
 		self.position = _pos
 		self.model = None
@@ -77,7 +78,8 @@ class Node():
 		pass
 
 	def giveLoot(self):
-		return self.lootAmount
+		self.lootLeft -= 1
+		return self.lootLeft
 
 	def giveType(self):
 		return self.type

@@ -19,6 +19,14 @@ class Terrain():
 
         self.terrain = GeoMipTerrain("BasicTerrain")
         self.terrain.setHeightfield(_heightField)
+
+        # Dynamic settings?
+        self.terrain.setBlockSize(16)
+        self.terrain.setNear(20)
+        self.terrain.setFar(100)
+        self.terrain.setFocalPoint(base.camera)
+
+        # Settings
         self.terrain.getRoot().setSz(self.zScale)
         self.terrain.getRoot().setTexture(texture)
         self.terrain.getRoot().reparentTo(render)
@@ -26,20 +34,21 @@ class Terrain():
 
         self.terrainSize = (self.terrain.heightfield().getReadXSize(), self.terrain.heightfield().getReadYSize())
         print "Terrain Size:", self.terrainSize
+        taskMgr.add(self.terrainTask, "TerrainTask")
 
         self.skydome = loader.loadModel("Skydome")
         self.skydome.setDepthTest(False)
         self.skydome.setAttrib(CullBinAttrib.make("skydomeBin", 1000))
         self.skydome.reparentTo(camera)
         self.skydome.setScale(2)
-        self.skydome.setPos(0, 0, -0.3)
+        self.skydome.setPos(0, 0, -0.5)
         self.skydome.setCollideMask(BitMask32.allOff())
         taskMgr.add(self.skydomeTask, "paperplanet_skydome")
 
         # Add some fancy fog
         self.fog = Fog("Fog Name")
         self.fog.setColor(0.4,0.2,0.3)
-        self.fog.setExpDensity(0.01)
+        self.fog.setExpDensity(0.015)
         render.setFog(self.fog)
 
         # Some Test light
@@ -58,3 +67,9 @@ class Terrain():
     def skydomeTask(self, task):
         self.skydome.setHpr(render, 0,0,0)
         return task.cont
+
+    def terrainTask(self, task):
+        # tmp
+        self.terrain.update()
+        return task.cont
+
