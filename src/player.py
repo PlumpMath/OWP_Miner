@@ -140,7 +140,12 @@ class Player(DirectObject):
             # This is so we get the closest object.
                 self.mouseRayHandler.sortEntries()
                 pickedObj = self.mouseRayHandler.getEntry(0).getIntoNodePath()
-                self.mine(pickedObj)
+
+                # Range check
+                if (self.player.getPos() - pickedObj.getPos(render)).length() <= 3.0:
+                    self.mine(pickedObj)
+                else:
+                    print "You are to far, move closer!"
 
 
     def mine(self, _nodeNP):
