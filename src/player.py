@@ -5,6 +5,7 @@ from panda3d.core import Vec3, GeomNode, CollisionTraverser
 from panda3d.core import NodePath, PandaNode, CollisionNode, CollisionRay, CollisionHandlerQueue
 from direct.showbase.DirectObject import DirectObject
 from inventoryGui import Inventory
+from craftingGui import CraftInventory
 
 class Player(DirectObject):
     def __init__(self, _main):
@@ -20,6 +21,8 @@ class Player(DirectObject):
         self.inventoryGui = Inventory()
         self.inventoryGui.hide()
         self.inventoryActive = False
+        self.craftInventory = CraftInventory()
+        self.craftInventory.hide()
 
         # enable movements through the level
         self.keyMap = {"left":0, "right":0, "forward":0, "backward":0}
@@ -38,6 +41,7 @@ class Player(DirectObject):
         self.accept("d-up", self.setKey, ["right",0])
         self.accept("mouse1", self.handleLeftMouse)
         self.accept("i", self.toggleInventory)
+        self.accept("c", self.toggleCraftInventory)
 
 
         # screen sizes
@@ -128,6 +132,17 @@ class Player(DirectObject):
             self.inventoryActive = True
             self.pause()
 
+    def toggleCraftInventory(self):
+        if self.inventoryActive:
+            self.craftInventory.hide()
+            self.inventoryActive = False
+            self.run()
+        else:
+            self.craftInventory.updateList(self.inventory)
+            self.craftInventory.show()
+            self.inventoryActive = True
+            self.pause()
+
     def handleLeftMouse(self):
         # Do the mining
         if base.mouseWatcherNode.hasMouse():
@@ -163,7 +178,7 @@ class Player(DirectObject):
 
 
             # if mining node
-            else: 
+            else:
 
                 if self.main.nodeGen.currentNodes[node].model and self.main.nodeGen.currentNodes[node].model.getPos() == self.nodeNP.getPos(render):
                     #self.main.nodeGen.currentNodes[node].removeModel()
